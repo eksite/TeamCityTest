@@ -1,11 +1,13 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-
+import React from "react";
+import Header from "./components/Header.jsx";
 
 const App = () => {
   return (
-    <div>initial</div>
-  )
-}
+    <>
+      <Header />
+      {/* mainComponent */}
+    </>
+  );
+};
 
 export default App;

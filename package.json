@@ -1,5 +1,5 @@
 {
-  "name": "unipage",
+  "name": "teamcitytest",
   "version": "1.0.0",
   "description": "Test task to  estimate my knowledge",
   "main": "index.js",
@@ -11,9 +11,9 @@
   "author": "Denis Levenets",
   "license": "ISC",
   "dependencies": {
+    "moment": "^2.29.1",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-router-dom": "^5.2.0"
+    "react-dom": "^17.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
