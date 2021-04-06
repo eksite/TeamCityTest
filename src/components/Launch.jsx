@@ -3,7 +3,28 @@ import React, { useEffect, useState } from "react";
 import useLoadData from "../hooks/useLoadData.jsx";
 import { baseDateFormatter } from "../utils/DateUtils.jsx";
 import LaunchItem from "./LaunchItem.jsx";
-import moment from "moment";
+import Styled from "styled-components";
+
+const LaunchColumn = Styled.div`
+  margin: 0 0 10px 0;
+  color: #14181E;
+  width: 100%;
+  height: 22px;
+  font-size: 18px;
+  padding-top: 22px;
+  padding-bottom: 36px;
+  background-color: rgba(18, 24, 57, 0.04);
+  &:nth-child(1) {
+      text-align:center;
+  }
+`;
+
+const ColumnsContainer = Styled.p`
+  margin: auto;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr 1fr;
+`;
 
 const DATA_URL =
   "https://raw.githubusercontent.com/denissokolov/tc-internship-task/master/launches.json";
@@ -12,13 +33,13 @@ const reformatData = (obj) => {
   let launchTimeStamp;
   let formattedLaunchTime;
   const {
-    launch: { months, date, hours, quarter },
+    launch: { months, date, hours, quarter, years },
   } = obj;
   if (!quarter) {
-    return { ...obj };
+    return { ...obj, launchTime: years };
   }
   [formattedLaunchTime, launchTimeStamp] = baseDateFormatter(obj);
-  if (!months || !date || hours) {
+  if (!months || !date || !hours) {
     return {
       ...obj,
       extraLaunchTimeStamp: launchTimeStamp,
@@ -49,11 +70,19 @@ const Launch = () => {
 
   return (
     displayedData && (
-      <div>
-        {displayedData.map((item, index) => (
-          <LaunchItem obj={item} key={index} />
-        ))}
-      </div>
+      <>
+        <ColumnsContainer>
+          <LaunchColumn>Mission</LaunchColumn>
+          <LaunchColumn>Vehicle</LaunchColumn>
+          <LaunchColumn>location</LaunchColumn>
+          <LaunchColumn>status</LaunchColumn>
+          <LaunchColumn>countdown</LaunchColumn>
+          <LaunchColumn>launchTime</LaunchColumn>
+          {displayedData.map((item, index) => (
+            <LaunchItem obj={item} key={index} />
+          ))}
+        </ColumnsContainer>
+      </>
     )
   );
 };

@@ -1,118 +1,128 @@
+import moment from "moment";
 import {
   timeFormatter,
   unixTimeStamp,
   getCurrentQuarter,
   getCurrentMonth,
-  getCurrentDay,
 } from "./DateUtils.jsx";
 
+const DAY_TIMESTAMP = 86400;
+
 const defineLaunchStatus = (obj) => {
-  if (!obj.extraLaunchTimeStamp && !obj.launchTimeStamp) {
-    return { ...obj, status: "this year", countdown: "TBD" };
+  const {
+    launch: { months, date, hours, quarter },
+  } = obj;
+  const extraLaunchTimeStamp = obj.extraLaunchTimeStamp;
+  const launchTimeStamp = obj.launchTimeStamp;
+
+  if (!extraLaunchTimeStamp && !launchTimeStamp) {
+    return { ...obj, status: "this year", countDown: "TBD" };
   }
 
-  const countDown = calculateCountDown(obj);
+  const remainingTimeStamp = calculateRemainingTimeStamp(obj);
 
-  if (obj.extraLaunchTimeStamp) {
-    if (!obj.launch.months) {
+  if (extraLaunchTimeStamp) {
+    if (!months) {
       const currentQuarter = getCurrentQuarter();
       switch (true) {
-        case countDown < 0 && currentQuarter > obj.launch.quarter: {
-
+        case remainingTimeStamp < 0 && currentQuarter > quarter: {
           return {
             ...obj,
             status: "Launched",
-            countdown: "TBD",
+            countDown: "TBD",
           };
         }
 
-        case countDown < 0 && currentQuarter == obj.launch.quarter: {
-          return { ...obj, status: "Planned", countdown: "this quartal" };
+        case remainingTimeStamp < 0 && currentQuarter == quarter: {
+          return { ...obj, status: "Planned", countDown: "this quartal" };
         }
 
-        case currentQuarter < obj.launch.quarter: {
+        case currentQuarter < quarter: {
           return {
             ...obj,
             status: "Planned",
-            countdown: `${timeFormatter(countDown)} until launching quartal`,
+            countDown: `${timeFormatter(
+              remainingTimeStamp
+            )} until launching quartal`,
           };
         }
         default:
-          return { ...obj, status: "TBD", countdown: "TBD" };
+          return { ...obj, status: "TBD", countDown: "TBD" };
       }
     }
 
-    if (!obj.launch.date) {
+    if (!date) {
       const currentMonth = getCurrentMonth();
       switch (true) {
-        case countDown < 0 && currentMonth > obj.launch.months: {
+        case remainingTimeStamp < 0 && currentMonth > months: {
           return {
             ...obj,
             status: "Launched",
-            countdown: "TBD",
+            countDown: "TBD",
           };
         }
 
-        case countDown < 0 && currentMonth == obj.launch.months: {
-          return { ...obj, status: "Planned", countdown: "this month" };
+        case remainingTimeStamp < 0 && currentMonth == months: {
+          return { ...obj, status: "Planned", countDown: "this month" };
         }
-        case currentMonth < obj.launch.months: {
+        case currentMonth < months: {
           return {
             ...obj,
             status: "Planned",
-            countdown: `${timeFormatter(countDown)} until launching month`,
+            countDown: `${timeFormatter(
+              remainingTimeStamp
+            )} until launching month`,
           };
         }
 
         default:
-          return { ...obj, status: "TBD", countdown: "TBD" };
+          return { ...obj, status: "TBD", countDown: "TBD" };
       }
     }
 
-    if (!obj.launch.hours) {
-      const currentDay = getCurrentDay();
-
+    if (!hours) {
       switch (true) {
-        case countDown < 0 && currentDay > obj.launch.date: {
+        case remainingTimeStamp < 0 && remainingTimeStamp > DAY_TIMESTAMP: {
           return {
             ...obj,
             status: "Launched",
-            countdown: "TBD",
+            countDown: "TBD",
           };
         }
 
-        case countDown < 0 && currentDay == obj.launch.date: {
+        case remainingTimeStamp < 0 && remainingTimeStamp < DAY_TIMESTAMP: {
           return { ...obj, status: "Planned", countDown: "this day" };
         }
-        
-        case countDown > 0 && currentDay < obj.launch.date: {
+
+        case remainingTimeStamp > 0: {
           return {
             ...obj,
             status: "Planned",
-            countdown: `${timeFormatter(countDown)} until launching day`,
+            countDown: `${timeFormatter(
+              remainingTimeStamp
+            )} until launching day`,
           };
         }
         default:
-          return { ...obj, status: "TBD", countdown: "TBD" };
+          return { ...obj, status: "TBD", countDown: "TBD" };
       }
     }
   }
 
   switch (true) {
-    case countDown < 0: {
+    case remainingTimeStamp < 0: {
       return {
         ...obj,
         status: "Launched",
-        countdown: timeFormatter(countDown),
+        countDown: timeFormatter(remainingTimeStamp),
       };
     }
 
-    case countDown > 0: {
-      const countDown = calculateCountDown(obj);
+    case remainingTimeStamp > 0: {
       return {
         ...obj,
         status: "Planned",
-        countdown: `${timeFormatter(countDown)} until launching`,
+        countDown: `${timeFormatter(remainingTimeStamp)} until launching`,
       };
     }
     default:
@@ -121,7 +131,7 @@ const defineLaunchStatus = (obj) => {
 };
 
 // countdown: timeFormatter(obj.launchTimeStamp - unixTimeStamp())
-const calculateCountDown = (obj) => {
+const calculateRemainingTimeStamp = (obj) => {
   if (obj.extraLaunchTimeStamp) {
     return obj.extraLaunchTimeStamp - unixTimeStamp();
   }

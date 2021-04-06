@@ -1,17 +1,27 @@
 import React from "react";
+import Styled from "styled-components";
+
+const LaunchProp = Styled.div`
+height: 76px;
+line-height: 76px;
+color: #14181E;
+background-color: ${(props) =>
+  props.isColor ? "rgba(18, 24, 57, 0.04)" : "#FFFFFF"};
+
+`;
 
 const LaunchItem = ({
-  obj: { mission, vehicle, location, status, countdown, launchTime },
+  obj: { mission, vehicle, location, status, countDown, launchTime },
 }) => {
   return (
-    <div style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between'}}>
-      <div style={{display:"flex", justifyContent: 'start'}}><p>{mission}</p></div>
-      <div><p>{vehicle}</p></div>
-      <div><p>{location}</p></div>
-      <div><p>{status}</p></div>
-      <div><p>{launchTime}</p></div>
-      <div><p>{countdown}</p></div>
-    </div>
+    <>
+      <LaunchProp>{mission}</LaunchProp>
+      <LaunchProp>{vehicle}</LaunchProp>
+      <LaunchProp>{location}</LaunchProp>
+      <LaunchProp>{launchTime}</LaunchProp>
+      <LaunchProp>{status}</LaunchProp>
+      <LaunchProp>{countDown}</LaunchProp>
+    </>
   );
 };
 
