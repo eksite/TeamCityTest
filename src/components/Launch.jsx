@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import useLoadData from "../hooks/useLoadData.jsx";
 import {
-  reformatData,
+  transformData,
   defineLaunchStatus,
 } from "../transformation/Transformation.jsx";
 import LaunchItem from "./LaunchItem.jsx";
 import Styled from "styled-components";
+import {getUrl} from '../config.js'
 
 const LaunchColumn = Styled.div`
   margin: 0 0 10px 0;
@@ -28,13 +29,12 @@ const ColumnsContainer = Styled.p`
   grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr 1fr;
 `;
 
-const DATA_URL =
-  "https://raw.githubusercontent.com/denissokolov/tc-internship-task/master/launches.json";
+
 
 const Launch = () => {
   const [displayedData, setDisplayedData] = useState([]);
-  const data = useLoadData(DATA_URL);
-  const reformatedData = data.map(reformatData);
+  const data = useLoadData(getUrl());
+  const reformatedData = data.map(transformData);
 
   useEffect(() => {
     const timeout = setTimeout(() => {

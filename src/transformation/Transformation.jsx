@@ -8,7 +8,7 @@ import {
 
 const DAY_LENGTH = 86400;
 
-const reformatData = (obj) => {
+const transformData = (obj) => {
   let launchTimeStamp;
   let formattedLaunchTime;
   const {
@@ -226,4 +226,4 @@ const calculateRemainingTimeStamp = (obj) => {
 
 
 
-export { reformatData, defineLaunchStatus };
+export { transformData , defineLaunchStatus };
