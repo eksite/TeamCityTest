@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useLoadData from "../hooks/useLoadData.jsx";
-import { reformatData ,defineLaunchStatus  } from "../transformation/Transformation.jsx";
+import {
+  reformatData,
+  defineLaunchStatus,
+} from "../transformation/Transformation.jsx";
 import LaunchItem from "./LaunchItem.jsx";
 import Styled from "styled-components";
 
@@ -28,7 +31,6 @@ const ColumnsContainer = Styled.p`
 const DATA_URL =
   "https://raw.githubusercontent.com/denissokolov/tc-internship-task/master/launches.json";
 
-
 const Launch = () => {
   const [displayedData, setDisplayedData] = useState([]);
   const data = useLoadData(DATA_URL);
@@ -50,9 +52,9 @@ const Launch = () => {
           <LaunchColumn>Mission</LaunchColumn>
           <LaunchColumn>Vehicle</LaunchColumn>
           <LaunchColumn>Location</LaunchColumn>
+          <LaunchColumn>Launch Time</LaunchColumn>
           <LaunchColumn>Status</LaunchColumn>
           <LaunchColumn>Countdown</LaunchColumn>
-          <LaunchColumn>LaunchTime</LaunchColumn>
           {displayedData.map((item, index) => (
             <LaunchItem obj={item} key={index} />
           ))}
