@@ -1,19 +1,105 @@
 import moment from "moment";
 import {
-  timeFormatter,
-  unixTimeStamp,
-  getCurrentQuarter,
-  getCurrentMonth,
-} from "./DateUtils.jsx";
+    timeFormatter,
+    unixTimeStamp,
+    getCurrentQuarter,
+    getCurrentMonth,
+  } from "../utils/DateUtils.jsx";
 
-const DAY_TIMESTAMP = 86400;
+const DAY_LENGTH = 86400;
+
+const reformatData = (obj) => {
+  let launchTimeStamp;
+  let formattedLaunchTime;
+  const {
+    launch: { months, date, hours, quarter, years },
+  } = obj;
+  if (!quarter) {
+    return { ...obj, launchTime: years };
+  }
+  [formattedLaunchTime, launchTimeStamp] = baseDateFormatter(obj);
+  if (!months || !date || !hours) {
+    return {
+      ...obj,
+      extraLaunchTimeStamp: launchTimeStamp,
+      launchTime: formattedLaunchTime,
+    };
+  }
+  return {
+    ...obj,
+    launchTimeStamp: launchTimeStamp,
+    launchTime: formattedLaunchTime,
+  };
+};
+
+const baseDateFormatter = (obj) => {
+  const {
+    launch: { years, months, date, hours, min },
+  } = obj;
+  if (!months || !date || !hours) {
+    const [launchTime, timeStamp] = extraLaunchTimeFormatter(obj);
+    return [launchTime, timeStamp];
+  }
+  const momentDate = moment({
+    y: years,
+    M: months,
+    d: date,
+    h: hours,
+    m: min,
+  });
+  return [momentDate.format("DD MMM YYYY [at] h:mm a"), momentDate.format("X")];
+};
+
+const extraLaunchTimeFormatter = (obj) => {
+  const {
+    launch: { years, months, date, hours, quarter },
+  } = obj;
+
+  if (!months) {
+    const QUARTER_START_MONTHS = [0, 3, 6, 9];
+    const momentDate = moment({
+      y: years,
+      M: QUARTER_START_MONTHS[quarter - 1],
+      d: 1,
+      h: 0,
+      m: 0,
+    })
+    return [momentDate.format("Qo [quartal of] YYYY"), momentDate.format("X")];
+    }
+  
+
+  if (!date) {
+    const momentDate = moment({
+      y: years,
+      M: months - 1,
+      d: 1,
+      h: 0,
+      m: 0,
+    });
+   
+    return [momentDate.format("MMM YYYY"), momentDate.format("X")];
+  }
+
+  if (!hours) {
+    const momentDate = moment({
+      y: years,
+      M: months - 1,
+      d: date,
+      h: 0,
+      m: 0,
+    });
+    return [momentDate.format("DD MMM YYYY"), momentDate.format("X")];
+  }
+};
+
+
 
 const defineLaunchStatus = (obj) => {
   const {
     launch: { months, date, hours, quarter },
+    extraLaunchTimeStamp,
+    launchTimeStamp,
   } = obj;
-  const extraLaunchTimeStamp = obj.extraLaunchTimeStamp;
-  const launchTimeStamp = obj.launchTimeStamp;
 
   if (!extraLaunchTimeStamp && !launchTimeStamp) {
     return { ...obj, status: "this year", countDown: "TBD" };
@@ -82,7 +168,7 @@ const defineLaunchStatus = (obj) => {
 
     if (!hours) {
       switch (true) {
-        case remainingTimeStamp < 0 && remainingTimeStamp > DAY_TIMESTAMP: {
+        case remainingTimeStamp < 0 && remainingTimeStamp > DAY_LENGTH: {
           return {
             ...obj,
             status: "Launched",
@@ -90,7 +176,7 @@ const defineLaunchStatus = (obj) => {
           };
         }
 
-        case remainingTimeStamp < 0 && remainingTimeStamp < DAY_TIMESTAMP: {
+        case remainingTimeStamp < 0 && remainingTimeStamp < DAY_LENGTH: {
           return { ...obj, status: "Planned", countDown: "this day" };
         }
 
@@ -114,7 +200,7 @@ const defineLaunchStatus = (obj) => {
       return {
         ...obj,
         status: "Launched",
-        countDown: timeFormatter(remainingTimeStamp),
+        countDown: `${timeFormatter(remainingTimeStamp)} since launching`,
       };
     }
 
@@ -138,4 +224,6 @@ const calculateRemainingTimeStamp = (obj) => {
   return obj.launchTimeStamp - unixTimeStamp();
 };
 
-export { defineLaunchStatus };
+
+
+export { reformatData, defineLaunchStatus };

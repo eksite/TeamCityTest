@@ -1,7 +1,6 @@
-import { defineLaunchStatus } from "../utils/FormattedDataUtils.jsx";
 import React, { useEffect, useState } from "react";
 import useLoadData from "../hooks/useLoadData.jsx";
-import { baseDateFormatter } from "../utils/DateUtils.jsx";
+import { reformatData ,defineLaunchStatus  } from "../transformation/Transformation.jsx";
 import LaunchItem from "./LaunchItem.jsx";
 import Styled from "styled-components";
 
@@ -29,30 +28,6 @@ const ColumnsContainer = Styled.p`
 const DATA_URL =
   "https://raw.githubusercontent.com/denissokolov/tc-internship-task/master/launches.json";
 
-const reformatData = (obj) => {
-  let launchTimeStamp;
-  let formattedLaunchTime;
-  const {
-    launch: { months, date, hours, quarter, years },
-  } = obj;
-  if (!quarter) {
-    return { ...obj, launchTime: years };
-  }
-  [formattedLaunchTime, launchTimeStamp] = baseDateFormatter(obj);
-  if (!months || !date || !hours) {
-    return {
-      ...obj,
-      extraLaunchTimeStamp: launchTimeStamp,
-      launchTime: formattedLaunchTime,
-    };
-  }
-
-  return {
-    ...obj,
-    launchTimeStamp: launchTimeStamp,
-    launchTime: formattedLaunchTime,
-  };
-};
 
 const Launch = () => {
   const [displayedData, setDisplayedData] = useState([]);
