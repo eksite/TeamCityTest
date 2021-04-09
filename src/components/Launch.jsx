@@ -6,10 +6,9 @@ import {
 } from "../transformation/Transformation.jsx";
 import LaunchItem from "./LaunchItem.jsx";
 import Styled from "styled-components";
-import {getUrl} from '../config.js'
+import { getUrl } from "../config.js";
 
 const LaunchColumn = Styled.div`
-  margin: 0 0 10px 0;
   color: #14181E;
   width: 100%;
   height: 22px;
@@ -17,19 +16,13 @@ const LaunchColumn = Styled.div`
   padding-top: 22px;
   padding-bottom: 36px;
   background-color: rgba(18, 24, 57, 0.04);
-  &:nth-child(1) {
-      text-align:center;
-  }
 `;
 
-const ColumnsContainer = Styled.p`
-  margin: auto;
-  display: grid;
+const ColumnsContainer = Styled.div`
+  display: flex;
+  flex-direction: 'column',
   width: 100%;
-  grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr 1fr;
 `;
-
-
 
 const Launch = () => {
   const [displayedData, setDisplayedData] = useState([]);
@@ -55,10 +48,10 @@ const Launch = () => {
           <LaunchColumn>Launch Time</LaunchColumn>
           <LaunchColumn>Status</LaunchColumn>
           <LaunchColumn>Countdown</LaunchColumn>
-          {displayedData.map((item, index) => (
-            <LaunchItem obj={item} key={index} />
-          ))}
         </ColumnsContainer>
+        {displayedData.map((item, index) => (
+          <LaunchItem obj={item} idx={index} key={index} />
+        ))}
       </>
     )
   );

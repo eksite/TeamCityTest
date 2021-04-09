@@ -15,8 +15,8 @@ const StyledContainer = Styled.div`
 `;
 
 const StyledParagraph = Styled.p`
-line-height: 26px;
-color: #FFFFFF;
+    line-height: 26px;
+    color: #FFFFFF;
 `;
 
 const Header = () => {
