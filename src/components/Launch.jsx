@@ -49,10 +49,10 @@ const Launch = () => {
         <ColumnsContainer>
           <LaunchColumn>Mission</LaunchColumn>
           <LaunchColumn>Vehicle</LaunchColumn>
-          <LaunchColumn>location</LaunchColumn>
-          <LaunchColumn>status</LaunchColumn>
-          <LaunchColumn>countdown</LaunchColumn>
-          <LaunchColumn>launchTime</LaunchColumn>
+          <LaunchColumn>Location</LaunchColumn>
+          <LaunchColumn>Status</LaunchColumn>
+          <LaunchColumn>Countdown</LaunchColumn>
+          <LaunchColumn>LaunchTime</LaunchColumn>
           {displayedData.map((item, index) => (
             <LaunchItem obj={item} key={index} />
           ))}
