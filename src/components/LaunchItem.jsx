@@ -3,31 +3,57 @@ import Styled from "styled-components";
 
 const LaunchProp = Styled.div`
 display: flex;
-flex-basis: 20%;
+flex-basis: 13%;
 height: 76px;
 line-height: 76px;
 color: #14181E;
-background-color: ${(props) =>
-  props.isColor ? "rgba(18, 24, 57, 0.04)" : "#FFFFFF"};
+&:nth-child(1) {
+  flex-basis: 21%;
+};
+&:nth-child(3) {
+  flex-basis: 21%;
+};
+&:nth-child(5) {
+  flex-basis: 10%;
+};
+&:nth-child(6) {
+  flex-basis: 10%;
+};
 `;
 
-const DataContainer = Styled.div`
-display: flex;
-flex-direction: 'row';
-`
+const Container = Styled.div`
+background-color: ${(props) =>
+  props.isColor ? "rgba(18, 24, 57, 0.04)" : "#FFFFFF"};
+  width:  100%;
+  display: flex;
+  justify-content: center;
+`;
 
 const LaunchItem = ({
-  obj: { mission, vehicle, location, status, countDown, launchTime }, idx
+  obj: { mission, vehicle, location, status, countDown, launchTime },
+  idx,
 }) => {
   return (
-    <DataContainer>
-      <LaunchProp isColor={idx%2}>{mission}</LaunchProp>
-      <LaunchProp isColor={idx%2}>{vehicle}</LaunchProp>
-      <LaunchProp isColor={idx%2}>{location}</LaunchProp>
-      <LaunchProp isColor={idx%2}>{launchTime}</LaunchProp>
-      <LaunchProp isColor={idx%2}>{status}</LaunchProp>
-      <LaunchProp isColor={idx%2}>{countDown}</LaunchProp>
-    </DataContainer>
+    <Container isColor={idx % 2}>
+      <LaunchProp>
+        <p>{mission}</p>
+      </LaunchProp>
+      <LaunchProp>
+        <p>{vehicle}</p>
+      </LaunchProp>
+      <LaunchProp>
+        <p>{location}</p>
+      </LaunchProp>
+      <LaunchProp>
+        <p>{launchTime}</p>
+      </LaunchProp>
+      <LaunchProp>
+        <p>{status}</p>
+      </LaunchProp>
+      <LaunchProp>
+        <p>{countDown}</p>
+      </LaunchProp>
+    </Container>
   );
 };
 
